@@ -1,4 +1,4 @@
-package com.travel.travelapp.user.api.dto
+package com.travel.travelapp.auth.api.dto
 
 data class SignUpBody(
     val email: String,

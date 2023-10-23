@@ -1,6 +1,6 @@
 package com.travel.travelapp.security
 
-import com.travel.travelapp.user.service.UserService
+import com.travel.travelapp.auth.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 class SecurityConfig(
     private val jwtUtils: JwtUtils,
-    private val userService:UserService
+    private val userService: UserService
 ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -46,9 +46,9 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/api/v1/users/signup","/api/v1/users/signin").permitAll()
+                    .requestMatchers("/api/v1/auth/signup","/api/v1/auth/signin").permitAll()
                     .requestMatchers(*authWhiteList).permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             }
             .sessionManagement { session ->
                 session

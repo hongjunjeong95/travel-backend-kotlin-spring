@@ -1,4 +1,4 @@
-package com.travel.travelapp.user.service
+package com.travel.travelapp.auth.service
 
 import com.travel.travelapp.user.persistent.User
 import org.springframework.security.core.GrantedAuthority

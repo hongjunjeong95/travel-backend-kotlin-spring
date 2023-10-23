@@ -1,16 +1,27 @@
 package com.travel.travelapp
 
+import com.travel.travelapp.auth.service.UserService
 import com.travel.travelapp.security.JWTClaim
 import com.travel.travelapp.security.JWTProperties
-import com.travel.travelapp.security.JWTUtil
+import com.travel.travelapp.security.JwtUtils
 import mu.KotlinLogging
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 class JWTUtilsTest {
-
     private val logger = KotlinLogging.logger {}
+
+    init {
+        val properties = JWTProperties(
+            issuer = "travelapp",
+            authExpiresTime = 3600,
+            authSecret = "asldkfjsalkdj",
+            refreshExpiresTime = 3600,
+            refreshSecret = "aslkdjaslkdf",
+        )
+
+        val jwtUtils = JwtUtils(properties)
 
     @Test
     fun createTokenTest() {
@@ -20,13 +31,7 @@ class JWTUtilsTest {
             username = "개발자",
         )
 
-        val properties = JWTProperties(
-            issuer = "travelapp",
-            expiresTime = 3600,
-            secret = "my-secret"
-        )
-
-        val token = JWTUtil.createAuthToken(jwtClaim, properties)
+        val token = jwtUtils.createAuthToken(jwtClaim, properties)
 
         assertNotNull(token)
 
@@ -39,12 +44,6 @@ class JWTUtilsTest {
             userId = 1,
             email = "dev@gmail.com",
             username = "개발자",
-        )
-
-        val properties = JWTProperties(
-            issuer = "jara",
-            expiresTime = 3600,
-            secret = "my-secret"
         )
 
         val token = JWTUtil.createAuthToken(jwtClaim, properties)
@@ -76,6 +75,7 @@ class JWTUtilsTest {
 //            val username = claims["username"]!!.asString()
 //            assertEquals(username, jwtClaim.username)
 //        }
+    }
 
     }
 }

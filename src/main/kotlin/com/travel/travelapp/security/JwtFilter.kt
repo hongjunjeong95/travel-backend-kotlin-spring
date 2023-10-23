@@ -1,7 +1,7 @@
 package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.travel.travelapp.user.service.UserService
+import com.travel.travelapp.auth.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -15,7 +15,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 class JwtFilter(private val jwtUtils: JwtUtils,
-                private val userService: UserService) : OncePerRequestFilter() {
+                private val userService: UserService
+) : OncePerRequestFilter() {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(JwtFilter::class.java)
         const val AUTHORIZATION_HEADER = "Authorization"
