@@ -7,7 +7,7 @@ import java.time.Instant
 import java.util.*
 
 
-object JWTUtil {
+object JwtUtils {
     private val ALGORITHM: Algorithm = Algorithm.HMAC256("jongwon")
     private const val AUTH_TIME: Long = 2
     private const val REFRESH_TIME = (60 * 60 * 24 * 7).toLong()

@@ -1,7 +1,7 @@
 package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.travel.travelapp.security.JWTUtil.verify
+import com.travel.travelapp.security.JwtUtils.verify
 import com.travel.travelapp.user.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException

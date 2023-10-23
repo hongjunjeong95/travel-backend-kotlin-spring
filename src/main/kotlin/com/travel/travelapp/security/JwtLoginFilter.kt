@@ -2,8 +2,8 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.travel.travelapp.security.JWTUtil.makeRefreshToken
-import com.travel.travelapp.security.JWTUtil.verify
+import com.travel.travelapp.security.JwtUtils.makeRefreshToken
+import com.travel.travelapp.security.JwtUtils.verify
 import com.travel.travelapp.user.api.dto.SignUpBody
 import com.travel.travelapp.user.persistent.User
 import com.travel.travelapp.user.service.UserService
@@ -76,7 +76,7 @@ class JWTLoginFilter(
             email = user.email,
             username = user.username
         )
-        response.setHeader("auth_token", JWTUtil.createAuthToken(jwtClaim, jwtProperties))
+        response.setHeader("auth_token", JwtUtils.createAuthToken(jwtClaim, jwtProperties))
         response.setHeader("refresh_token", makeRefreshToken(user))
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         response.outputStream.write(objectMapper.writeValueAsBytes(user))

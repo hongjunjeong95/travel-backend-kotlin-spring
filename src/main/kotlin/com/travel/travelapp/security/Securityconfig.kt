@@ -51,32 +51,29 @@ class SecurityConfig(
             ),
             userService,
         )
-//        http
-//            .csrf { it.disable() }
-//            .authorizeHttpRequests {
-//                it
-//                    .requestMatchers("/admin.html").hasRole("ADMIN")
-//                    .requestMatchers("/","/admin.html", "/swagger-ui/**","/h2-console").permitAll()
-//                    .anyRequest().authenticated()
-//            }
-//            .formLogin {  }
-//            .logout {  }
-//            .sessionManagement {  }
+
+        val authWhiteList = arrayOf(
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/h2-console"
+        )
+
         http
             .csrf { csrf -> csrf.disable() }
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/admin.html").permitAll()
-                    .requestMatchers("/","/admin.html", "/swagger-ui/**","/h2-console").permitAll()
+                    .requestMatchers(*authWhiteList).permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement { session ->
                 session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            .formLogin {  }
-//            .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
-//            .addFilterAt(checkFilter, BasicAuthenticationFilter::class.java)
+            .formLogin { it.disable() }
+            .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterAt(checkFilter, BasicAuthenticationFilter::class.java)
 
         return http.build()
     }

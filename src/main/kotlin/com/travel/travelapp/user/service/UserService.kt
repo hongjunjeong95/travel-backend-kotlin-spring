@@ -7,7 +7,7 @@ import com.travel.travelapp.common.exception.UserNotFoundException
 import com.travel.travelapp.common.utils.BCryptUtils
 import com.travel.travelapp.security.JWTClaim
 import com.travel.travelapp.security.JWTProperties
-import com.travel.travelapp.security.JWTUtil
+import com.travel.travelapp.security.JwtUtils
 import com.travel.travelapp.user.api.dto.SignInBody
 import com.travel.travelapp.user.api.dto.SignInResponse
 import com.travel.travelapp.user.api.dto.SignUpBody
@@ -59,7 +59,7 @@ class UserService(
                 username = username
             )
 
-            val token = JWTUtil.createAuthToken(jwtClaim, jwtProperties)
+            val token = JwtUtils.createAuthToken(jwtClaim, jwtProperties)
 
             SignInResponse(
                 email = email,
