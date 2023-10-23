@@ -1,88 +1,86 @@
 package com.travel.travelapp.security
 
+import com.travel.travelapp.user.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
 
-//@EnableWebSecurity(debug = true)
-//@EnableMethodSecurity(securedEnabled = true)
+@EnableWebSecurity(debug = true)
+@EnableMethodSecurity(securedEnabled = true)
 @Configuration
-class SecurityConfig {
+class SecurityConfig(
+    private val userService: UserService,
+    private val jwtProperties: JWTProperties
+) {
+    @Bean
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
+
+    @Bean
+    @Throws(Exception::class)
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration?): AuthenticationManager? =
+        authenticationConfiguration?.getAuthenticationManager()
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-//        val loginFilter = JWTLoginFilter(
-//            authenticationManager(
-//                http.getSharedObject(
-//                    AuthenticationConfiguration::class.java
-//                )
-//            ), userService, jwtProperties
-//        )
-//        val checkFilter = com.travelapp.travelapp.security.JWTCheckFilter(
-//            authenticationManager(
-//                http.getSharedObject(
-//                    AuthenticationConfiguration::class.java
-//                )
-//            ),
-//            userService,
-//        )
-        http
-            .authorizeHttpRequests {
-                it
-                    .requestMatchers("/admin.html").hasRole("ADMIN")
-                    .requestMatchers("/","/admin.html", "/swagger-ui/**","/h2-console").permitAll()
-                    .anyRequest().permitAll()
-            }
-            .formLogin {  }
-            .logout {  }
-
-//        http {
-//            authorizeRequests {
-//                authorize(anyRequest, authenticated)
-//            }
-//            formLogin { }
-//            httpBasic { }
-//        }
-//        return http.build()
-
+        val loginFilter = JWTLoginFilter(
+            authenticationManager(
+                http.getSharedObject(
+                    AuthenticationConfiguration::class.java
+                )
+            ), userService, jwtProperties
+        )
+        val checkFilter = JWTCheckFilter(
+            authenticationManager(
+                http.getSharedObject(
+                    AuthenticationConfiguration::class.java
+                )
+            ),
+            userService,
+        )
 //        http
 //            .csrf { it.disable() }
-//            .formLogin { it.disable() }
-//            .httpBasic { it.disable() }
 //            .authorizeHttpRequests {
 //                it
-//                    .requestMatchers("/", "/swagger-ui/**","/h2-console").permitAll()
-//                    .requestMatchers(PathRequest.toH2Console()).permitAll()
-//                .anyRequest().permitAll()
+//                    .requestMatchers("/admin.html").hasRole("ADMIN")
+//                    .requestMatchers("/","/admin.html", "/swagger-ui/**","/h2-console").permitAll()
+//                    .anyRequest().authenticated()
 //            }
-//            .sessionManagement {
-//                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//            }
+//            .formLogin {  }
+//            .logout {  }
+//            .sessionManagement {  }
+        http
+            .csrf { csrf -> csrf.disable() }
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers("/admin.html").permitAll()
+                    .requestMatchers("/","/admin.html", "/swagger-ui/**","/h2-console").permitAll()
+                    .anyRequest().authenticated()
+            }
+            .sessionManagement { session ->
+                session
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .formLogin {  }
 //            .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
 //            .addFilterAt(checkFilter, BasicAuthenticationFilter::class.java)
-//        http
-//            .authorizeHttpRequests { auth ->
-//                auth
-//                    .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-//            }
-//            .headers { headers -> headers.frameOptions().disable() }
-//            .csrf { csrf ->
-//                csrf
-//                    .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
-//            }
+
         return http.build()
     }
 
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
     @Bean
     fun users(): UserDetailsService {
         val user = User.builder()

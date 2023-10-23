@@ -41,6 +41,10 @@ dependencies {
 	// logging
 	implementation("io.github.microutils:kotlin-logging:3.0.5")
 
+	// swagger
+	implementation("io.springfox:springfox-boot-starter:3.0.0")
+	implementation("io.springfox:springfox-swagger-ui:3.0.0")
+
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
