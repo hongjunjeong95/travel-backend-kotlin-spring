@@ -38,6 +38,9 @@ dependencies {
 	implementation("org.flywaydb:flyway-mysql")
 	runtimeOnly("com.mysql:mysql-connector-j")
 
+	// logging
+	implementation("io.github.microutils:kotlin-logging:3.0.5")
+
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
