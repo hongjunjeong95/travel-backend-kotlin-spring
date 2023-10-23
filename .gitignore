@@ -39,3 +39,4 @@ out/
 # config
 *.yml
 application.properties
+flyway.conf
