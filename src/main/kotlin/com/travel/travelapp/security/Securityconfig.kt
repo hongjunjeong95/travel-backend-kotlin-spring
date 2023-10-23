@@ -16,15 +16,14 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
 
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
 @Configuration
 class SecurityConfig(
-    private val userService: UserService,
-    private val jwtProperties: JWTProperties
+    private val jwtUtils: JwtUtils,
+    private val userService:UserService
 ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -36,22 +35,6 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        val loginFilter = JWTLoginFilter(
-            authenticationManager(
-                http.getSharedObject(
-                    AuthenticationConfiguration::class.java
-                )
-            ), userService, jwtProperties
-        )
-        val checkFilter = JWTCheckFilter(
-            authenticationManager(
-                http.getSharedObject(
-                    AuthenticationConfiguration::class.java
-                )
-            ),
-            userService,
-        )
-
         val authWhiteList = arrayOf(
             "/swagger-ui/**",
             "/v3/api-docs/**",
@@ -60,10 +43,10 @@ class SecurityConfig(
         )
 
         http
-            .csrf { csrf -> csrf.disable() }
+            .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/admin.html").permitAll()
+                    .requestMatchers("/api/v1/users/signup","/api/v1/users/signin").permitAll()
                     .requestMatchers(*authWhiteList).permitAll()
                     .anyRequest().authenticated()
             }
@@ -72,8 +55,9 @@ class SecurityConfig(
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .formLogin { it.disable() }
-            .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterAt(checkFilter, BasicAuthenticationFilter::class.java)
+            .addFilterAt(JwtFilter(jwtUtils, userService),UsernamePasswordAuthenticationFilter::class.java)
+//            .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
+//            .addFilterAt(checkFilter, BasicAuthenticationFilter::class.java)
 
         return http.build()
     }

@@ -6,7 +6,6 @@ import com.travel.travelapp.common.exception.UserExistsException
 import com.travel.travelapp.common.exception.UserNotFoundException
 import com.travel.travelapp.common.utils.BCryptUtils
 import com.travel.travelapp.security.JWTClaim
-import com.travel.travelapp.security.JWTProperties
 import com.travel.travelapp.security.JwtUtils
 import com.travel.travelapp.user.api.dto.SignInBody
 import com.travel.travelapp.user.api.dto.SignInResponse
@@ -22,11 +21,11 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val jwtProperties: JWTProperties,
+    private val jwtUtils: JwtUtils,
 ): UserDetailsService {
 
     @Transactional
-    suspend fun signUp(signUpBody: SignUpBody) {
+    fun signUp(signUpBody: SignUpBody) {
         with(signUpBody){
             userRepository.findByEmail(email)?.let{
                 throw UserExistsException()
@@ -46,7 +45,7 @@ class UserService(
 
 
     @Transactional(readOnly = true)
-    suspend fun signIn(signInBody: SignInBody): SignInResponse {
+    fun signIn(signInBody: SignInBody): SignInResponse {
         return with(userRepository.findByEmail(signInBody.email) ?: throw UserNotFoundException()) {
             val verified = BCryptUtils.verify(signInBody.password, password)
             if (!verified) {
@@ -59,11 +58,18 @@ class UserService(
                 username = username
             )
 
-            val token = JwtUtils.createAuthToken(jwtClaim, jwtProperties)
+            // get tokens
+            val authToken = jwtUtils.createAuthToken(jwtClaim)
+            val refreshToken = jwtUtils.createRefreshToken(jwtClaim)
+
+            // update refresh token on user
+            currentHashedRefreshToken = refreshToken
+            userRepository.save(this)
 
             SignInResponse(
                 email = email,
-                token = token
+                authToken = authToken,
+                refreshToken = refreshToken
             )
         }
     }

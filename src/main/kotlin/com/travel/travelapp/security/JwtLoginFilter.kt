@@ -2,8 +2,6 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.travel.travelapp.security.JwtUtils.makeRefreshToken
-import com.travel.travelapp.security.JwtUtils.verify
 import com.travel.travelapp.user.api.dto.SignUpBody
 import com.travel.travelapp.user.persistent.User
 import com.travel.travelapp.user.service.UserService
@@ -27,7 +25,7 @@ import java.time.ZoneId
 class JWTLoginFilter(
     private val authenticationManager: AuthenticationManager?,
     private val userService: UserService,
-    private val jwtProperties: JWTProperties
+    private val jwtUtils: JwtUtils
 ) :
     UsernamePasswordAuthenticationFilter(authenticationManager) {
     private val objectMapper = ObjectMapper()
@@ -50,7 +48,7 @@ class JWTLoginFilter(
             // user details...
             authenticationManager!!.authenticate(token)
         } else {
-            val result =  verify(refresh)
+            val result =  jwtUtils.verifyAuthToken(refresh)
             if (result.success) {
                 val user: UserDetails = userService.loadUserByUsername(result.decodedJwt.claims["username"].toString())
                 UsernamePasswordAuthenticationToken(
@@ -76,8 +74,8 @@ class JWTLoginFilter(
             email = user.email,
             username = user.username
         )
-        response.setHeader("auth_token", JwtUtils.createAuthToken(jwtClaim, jwtProperties))
-        response.setHeader("refresh_token", makeRefreshToken(user))
+        response.setHeader("auth_token", jwtUtils.createAuthToken(jwtClaim))
+        response.setHeader("refresh_token", jwtUtils.createRefreshToken(jwtClaim))
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         response.outputStream.write(objectMapper.writeValueAsBytes(user))
     }

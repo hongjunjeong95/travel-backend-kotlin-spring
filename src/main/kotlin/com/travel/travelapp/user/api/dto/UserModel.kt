@@ -13,5 +13,6 @@ data class SignInBody(
 
 data class SignInResponse(
     val email: String,
-    val token: String,
+    val authToken: String,
+    val refreshToken: String,
 )

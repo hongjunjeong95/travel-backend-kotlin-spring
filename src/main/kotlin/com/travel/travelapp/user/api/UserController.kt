@@ -13,12 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/users")
 class UserController(private val userService: UserService) {
     @PostMapping("/signup")
-    suspend fun signUp(@RequestBody signUpBody: SignUpBody) {
-        return userService.signUp(signUpBody)
-    }
+    fun signUp(@RequestBody signUpBody: SignUpBody) = userService.signUp(signUpBody)
 
     @PostMapping("/signin")
-    suspend fun signIn(@RequestBody signInBody: SignInBody): SignInResponse {
-        return userService.signIn(signInBody)
-    }
+    fun signIn(@RequestBody signInBody: SignInBody): SignInResponse = userService.signIn(signInBody)
 }

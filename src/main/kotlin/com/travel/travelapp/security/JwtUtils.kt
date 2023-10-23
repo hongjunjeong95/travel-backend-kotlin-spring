@@ -2,40 +2,52 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.travel.travelapp.user.persistent.User
-import java.time.Instant
+import org.springframework.stereotype.Component
 import java.util.*
 
 
-object JwtUtils {
-    private val ALGORITHM: Algorithm = Algorithm.HMAC256("jongwon")
-    private const val AUTH_TIME: Long = 2
-    private const val REFRESH_TIME = (60 * 60 * 24 * 7).toLong()
+@Component
+class JwtUtils(private val jwtProperties: JWTProperties) {
+    private val AUTH_ALGORITHM = Algorithm.HMAC256(jwtProperties.authSecret)
+    private val REFRESH_ALGORITHM = Algorithm.HMAC256(jwtProperties.refreshSecret)
 
-    fun createAuthToken(claim: JWTClaim, properties: JWTProperties) =
+    fun createAuthToken(claim: JWTClaim) =
         JWT.create()
-            .withIssuer(properties.issuer)
+            .withIssuer(jwtProperties.issuer)
             .withSubject(claim.userId.toString())
             .withIssuedAt(Date())
-            .withExpiresAt(Date(Date().time + properties.expiresTime * 1000))
+            .withExpiresAt(Date(Date().time + jwtProperties.authExpiresTime * 1000))
             .withClaim("email", claim.email)
             .withClaim("username", claim.username)
-            .sign(Algorithm.HMAC256(properties.secret))
+            .sign(AUTH_ALGORITHM)
 
-    fun makeRefreshToken(user: User): String {
+    fun createRefreshToken(claim: JWTClaim): String {
         return JWT.create()
-            .withSubject(user.email)
-            .withClaim("exp", Instant.now().epochSecond + REFRESH_TIME)
-            .sign(ALGORITHM)
+            .withIssuer(jwtProperties.issuer)
+            .withSubject(claim.userId.toString())
+            .withIssuedAt(Date())
+            .withExpiresAt(Date(Date().time + jwtProperties.refreshExpiresTime * 1000))
+            .withClaim("email", claim.email)
+            .withClaim("username", claim.username)
+            .sign(REFRESH_ALGORITHM)
     }
 
-    fun verify(token: String?): VerifyResult =
-         try {
-            val decodedJwt = JWT.require(ALGORITHM).build().verify(token)
-             VerifyResult(true, decodedJwt)
+    fun verifyAuthToken(token: String?): VerifyResult =
+        try {
+            val decodedJwt = JWT.require(AUTH_ALGORITHM).build().verify(token)
+            VerifyResult(true, decodedJwt)
         } catch (ex: Exception) {
             val decodedJwt = JWT.decode(token)
-             VerifyResult(false, decodedJwt)
+            VerifyResult(false, decodedJwt)
+        }
+
+    fun verifyRefreshToken(token: String?): VerifyResult =
+        try {
+            val decodedJwt = JWT.require(REFRESH_ALGORITHM).build().verify(token)
+            VerifyResult(true, decodedJwt)
+        } catch (ex: Exception) {
+            val decodedJwt = JWT.decode(token)
+            VerifyResult(false, decodedJwt)
         }
 }
 

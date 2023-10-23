@@ -18,4 +18,7 @@ data class User(
 
     @Column
     var username: String,
+
+    @Column(name = "current_hashed_refresh_token", nullable = true)
+    var currentHashedRefreshToken: String? = null
 ): BaseEntity()

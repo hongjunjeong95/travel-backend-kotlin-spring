@@ -1,7 +1,6 @@
 package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.travel.travelapp.security.JwtUtils.verify
 import com.travel.travelapp.user.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
@@ -16,7 +15,10 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-class JWTCheckFilter(private val authenticationManager: AuthenticationManager?, private val userService: UserService) :
+class JWTCheckFilter(
+    private val authenticationManager: AuthenticationManager?,
+    private val jwtUtils: JwtUtils,
+    private val userService: UserService) :
     BasicAuthenticationFilter(authenticationManager) {
 
     @Throws(IOException::class, ServletException::class)
@@ -27,7 +29,7 @@ class JWTCheckFilter(private val authenticationManager: AuthenticationManager?, 
             return
         }
         val token = bearer.substring("Bearer ".length)
-        val result = verify(token)
+        val result = jwtUtils.verifyAuthToken(token)
         if (result.success) {
             val user = userService.loadUserByUsername(result.decodedJwt.claims["username"].toString())
             val userToken = UsernamePasswordAuthenticationToken(

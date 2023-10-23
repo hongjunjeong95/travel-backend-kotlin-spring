@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 
 
-//@Component
-class LoginInterceptor() : HandlerInterceptor {
+@Component
+class LoginInterceptor(private val jwtUtils: JwtUtils): HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         if (isPreflight(request) || isSwaggerRequest(request)) {
             return true
         }
         val token: String = AuthorizationExtractor.extractAccessToken(request)
-        JwtUtils.verify(token)
+        jwtUtils.verifyAuthToken(token)
         return true
     }
 
