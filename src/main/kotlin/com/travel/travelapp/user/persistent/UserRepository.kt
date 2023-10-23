@@ -1,9 +1,8 @@
-package com.travelapp.travelapp.user.persistent
+package com.travel.travelapp.user.persistent
 
-import com.travel.travelapp.user.persistent.User
-import org.springframework.data.jpa.repository.JpaRepository
+import com.travel.travelapp.common.persistent.BaseRepository
 
-interface UserRepository: JpaRepository<User, Long> {
+interface UserRepository: BaseRepository<User, Long> {
     fun findByEmail(email: String): User?
     fun findByUsername(username: String) : User?
 }
