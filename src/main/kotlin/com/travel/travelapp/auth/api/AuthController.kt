@@ -5,7 +5,6 @@ import com.travel.travelapp.auth.api.dto.SignInResponse
 import com.travel.travelapp.auth.api.dto.SignUpBody
 import com.travel.travelapp.auth.service.AuthService
 import com.travel.travelapp.security.AuthUser
-import com.travel.travelapp.security.AuthUserData
 import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.web.bind.annotation.*
 
@@ -19,7 +18,7 @@ class AuthController(private val authService: AuthService) {
     fun signIn(@RequestBody signInBody: SignInBody): SignInResponse=authService.signIn(signInBody)
 
     @GetMapping("/refresh")
-    fun refresh(@Parameter(hidden = true) @AuthUser user: AuthUserData): AuthUserData{
+    fun refresh(@Parameter(hidden = true) user:AuthUser): AuthUser{
         println("start")
         println(user)
         println("end")

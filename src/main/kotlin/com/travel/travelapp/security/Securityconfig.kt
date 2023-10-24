@@ -1,6 +1,5 @@
 package com.travel.travelapp.security
 
-import com.travel.travelapp.user.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -23,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 class SecurityConfig(
     private val jwtUtils: JwtUtils,
-    private val userService: UserService
 ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -55,7 +53,7 @@ class SecurityConfig(
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .formLogin { it.disable() }
-            .addFilterAt(JwtFilter(jwtUtils, userService),UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterAt(JwtFilter(jwtUtils),UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 

@@ -19,13 +19,13 @@ class AuthUserHandlerArgumentResolver: HandlerMethodArgumentResolver {
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): AuthUserData {
+    ): AuthUser {
         val authentication = SecurityContextHolder.getContext().authentication
-        return authentication.principal as AuthUserData // Change 'User' to your actual User class
+        return authentication.principal as AuthUser // Change 'User' to your actual User class
     }
 }
 
-data class AuthUserData(
+data class AuthUser(
     val id: Long,
     val email: String,
     val username: String,

@@ -1,4 +1,4 @@
-package com.travel.travelapp.common.interceptors
+package com.travel.travelapp.common.config
 
 import com.travel.travelapp.security.AuthUserHandlerArgumentResolver
 import org.springframework.context.annotation.Configuration

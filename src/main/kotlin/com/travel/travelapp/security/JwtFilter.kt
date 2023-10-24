@@ -1,13 +1,13 @@
 package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.travel.travelapp.user.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.StringUtils
 import org.springframework.web.filter.OncePerRequestFilter
@@ -15,7 +15,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 class JwtFilter(private val jwtUtils: JwtUtils,
-                private val userService: UserService
 ) : OncePerRequestFilter() {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(JwtFilter::class.java)
@@ -41,13 +40,13 @@ class JwtFilter(private val jwtUtils: JwtUtils,
             val userId = result.decodedJwt.subject.toLong()
             val email = result.decodedJwt.claims["email"]?.asString() ?: ""
             val username = result.decodedJwt.claims["username"]?.asString() ?: ""
-            val authUser = AuthUserData(
+            val authUser = AuthUser(
                 id = userId,
                 email = email,
                 username = username
             )
             val userToken = UsernamePasswordAuthenticationToken(
-                authUser, null
+                authUser, null, AuthorityUtils.createAuthorityList()
             )
             SecurityContextHolder.getContext().authentication = userToken
             logger.info("Security Context에 '${userToken.name}' 인증 정보를 저장했습니다, uri: $requestURI")
