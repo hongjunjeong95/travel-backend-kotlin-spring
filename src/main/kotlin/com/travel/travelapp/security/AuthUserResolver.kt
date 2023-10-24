@@ -1,24 +1,32 @@
 package com.travel.travelapp.security
 
-import com.travel.travelapp.common.interceptors.AuthUser
-import com.travel.travelapp.user.persistent.User
-import org.aspectj.lang.ProceedingJoinPoint
-import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.core.MethodParameter
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.support.WebDataBinderFactory
+import org.springframework.web.context.request.NativeWebRequest
+import org.springframework.web.method.support.HandlerMethodArgumentResolver
+import org.springframework.web.method.support.ModelAndViewContainer
 
-//@Aspect
-//@Component
-class AuthUserResolver(
-    private val authenticationManager: AuthenticationManager
-) {
-//    @Around("@annotation(authUser)")
-    fun processAuthUserParameter(joinPoint: ProceedingJoinPoint, authUser: AuthUser): Any? {
+@Component
+class AuthUserHandlerArgumentResolver: HandlerMethodArgumentResolver {
+
+    override fun supportsParameter(parameter: MethodParameter): Boolean =
+        AuthUser::class.java.isAssignableFrom(parameter.parameterType)
+
+    override fun resolveArgument(
+        parameter: MethodParameter,
+        mavContainer: ModelAndViewContainer?,
+        webRequest: NativeWebRequest,
+        binderFactory: WebDataBinderFactory?
+    ): AuthUserData {
         val authentication = SecurityContextHolder.getContext().authentication
-        val user = authentication.principal as User // Change 'User' to your actual User class
-
-        // You can perform additional checks or validations here if needed
-
-        // Proceed with the original method invocation
-        return joinPoint.proceed(arrayOf(user))
+        return authentication.principal as AuthUserData // Change 'User' to your actual User class
     }
 }
+
+data class AuthUserData(
+    val id: Long,
+    val email: String,
+    val username: String,
+)

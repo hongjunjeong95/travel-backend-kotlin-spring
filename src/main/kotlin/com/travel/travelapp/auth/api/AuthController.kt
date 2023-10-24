@@ -4,14 +4,10 @@ import com.travel.travelapp.auth.api.dto.SignInBody
 import com.travel.travelapp.auth.api.dto.SignInResponse
 import com.travel.travelapp.auth.api.dto.SignUpBody
 import com.travel.travelapp.auth.service.AuthService
-import com.travel.travelapp.common.interceptors.AuthUser
-//import com.travel.travelapp.security.AuthUser
-import com.travel.travelapp.user.persistent.User
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.travel.travelapp.security.AuthUser
+import com.travel.travelapp.security.AuthUserData
+import io.swagger.v3.oas.annotations.Parameter
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -20,14 +16,13 @@ class AuthController(private val authService: AuthService) {
     fun signUp(@RequestBody signUpBody: SignUpBody) = authService.signUp(signUpBody)
 
     @PostMapping("/signin")
-    fun signIn(@RequestBody signInBody: SignInBody, user: AuthUser): SignInResponse{
-        println(user)
-        return authService.signIn(signInBody)
-    }
+    fun signIn(@RequestBody signInBody: SignInBody): SignInResponse=authService.signIn(signInBody)
 
     @GetMapping("/refresh")
-    fun refresh(@RequestBody signInBody: SignInBody, user: AuthUser): SignInResponse{
+    fun refresh(@Parameter(hidden = true) @AuthUser user: AuthUserData): AuthUserData{
+        println("start")
         println(user)
-        return authService.refresh(signInBody)
+        println("end")
+        return user
     }
 }

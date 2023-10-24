@@ -25,10 +25,12 @@ spring:
     locations: classpath:/db/migration
     baseline-version: 1
     validate-on-migrate: true
-
 jwt:
   issuer: travel
   authSecret: 'a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ=='
-  authExpiresTime: 3600
+  authExpiresTime: 3600123123
   refreshSecret: 'a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ=='
   refreshExpiresTime: 36000
+logging:
+  level:
+    root: trace

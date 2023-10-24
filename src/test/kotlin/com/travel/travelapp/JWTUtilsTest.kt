@@ -1,6 +1,5 @@
 package com.travel.travelapp
 
-import com.travel.travelapp.auth.service.UserService
 import com.travel.travelapp.security.JWTClaim
 import com.travel.travelapp.security.JWTProperties
 import com.travel.travelapp.security.JwtUtils

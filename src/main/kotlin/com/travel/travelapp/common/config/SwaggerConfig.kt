@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.util.*
 
 @OpenAPIDefinition(info = Info(title = "Travel App API 명세서", description = "여행 API 명세서", version = "v1"))
 @Configuration
@@ -21,6 +20,6 @@ class SwaggerConfig {
         val securityRequirement: SecurityRequirement = SecurityRequirement().addList("bearerAuth")
         return OpenAPI()
             .components(Components().addSecuritySchemes("bearerAuth", securityScheme))
-            .security(Arrays.asList(securityRequirement))
+            .security(listOf(securityRequirement))
     }
 }

@@ -1,7 +1,7 @@
 package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.travel.travelapp.auth.service.UserService
+import com.travel.travelapp.user.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -38,9 +38,16 @@ class JwtFilter(private val jwtUtils: JwtUtils,
         val result = jwtUtils.verifyAuthToken(token)
 
         if (result.success) {
-            val user = userService.loadUserByUsername(result.decodedJwt.claims["username"].toString())
+            val userId = result.decodedJwt.subject.toLong()
+            val email = result.decodedJwt.claims["email"]?.asString() ?: ""
+            val username = result.decodedJwt.claims["username"]?.asString() ?: ""
+            val authUser = AuthUserData(
+                id = userId,
+                email = email,
+                username = username
+            )
             val userToken = UsernamePasswordAuthenticationToken(
-                user.username, null, user.authorities
+                authUser, null
             )
             SecurityContextHolder.getContext().authentication = userToken
             logger.info("Security Context에 '${userToken.name}' 인증 정보를 저장했습니다, uri: $requestURI")

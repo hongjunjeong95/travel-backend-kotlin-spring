@@ -1,6 +1,6 @@
 package com.travel.travelapp.security
 
-import com.travel.travelapp.auth.service.UserService
+import com.travel.travelapp.user.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -48,7 +48,7 @@ class SecurityConfig(
                 it
                     .requestMatchers("/api/v1/auth/signup","/api/v1/auth/signin").permitAll()
                     .requestMatchers(*authWhiteList).permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             }
             .sessionManagement { session ->
                 session
@@ -56,9 +56,6 @@ class SecurityConfig(
             }
             .formLogin { it.disable() }
             .addFilterAt(JwtFilter(jwtUtils, userService),UsernamePasswordAuthenticationFilter::class.java)
-//            .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
-//            .addFilterAt(checkFilter, BasicAuthenticationFilter::class.java)
-
         return http.build()
     }
 
