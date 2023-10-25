@@ -2,7 +2,7 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import org.springframework.security.core.GrantedAuthority
+import com.travel.travelapp.user.persistent.UserRole
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -21,6 +21,7 @@ class TokenProvider(
             .withExpiresAt(Date(Date().time + jwtProperties.authExpiresTime * 1000))
             .withClaim("email", claim.email)
             .withClaim("username", claim.username)
+            .withClaim("role", claim.role.toString())
             .sign(AUTH_ALGORITHM)
 
     fun createRefreshToken(claim: JWTClaim): String {
@@ -57,5 +58,5 @@ data class JWTClaim(
     val userId: Long,
     val email: String,
     val username: String,
-    val role: Set<GrantedAuthority>
+    val role: UserRole
 )

@@ -31,12 +31,13 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
                 val claims = result.decodedJwt.claims
                 val email = claims["email"]?.asString() ?: ""
                 val username = claims["username"]?.asString() ?: ""
-                val role = (claims["role"] ?: "anonymous") as UserRole
+                val role = claims["role"]?.asString() ?: "anonymous"
+
                 val authUser = AuthUser(
                     id = userId,
                     email = email,
                     username = username,
-                    role = setOf(SimpleGrantedAuthority(role.toString()))
+                    role = setOf(SimpleGrantedAuthority(role))
                 )
                 UsernamePasswordAuthenticationToken(
                     authUser, null, authUser.role

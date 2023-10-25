@@ -55,14 +55,12 @@ class AuthService(
                 userId = id,
                 email = email,
                 username = username,
-                role = setOf(SimpleGrantedAuthority(role.toString()))
+                role = role
             )
 
-            // get tokens
             val authToken = tokenProvider.createAuthToken(jwtClaim)
             val refreshToken = tokenProvider.createRefreshToken(jwtClaim)
 
-            // update refresh token on user
             currentHashedRefreshToken = BCryptUtils.encrypt(refreshToken)
             userRepository.save(this)
 
@@ -81,7 +79,7 @@ class AuthService(
                 userId = id,
                 email = email,
                 username = username,
-                role = setOf(SimpleGrantedAuthority(role.toString()))
+                role = role
             )
 
             val authToken = tokenProvider.createAuthToken(jwtClaim)
