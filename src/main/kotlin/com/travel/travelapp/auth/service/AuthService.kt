@@ -60,7 +60,7 @@ class AuthService(
             val refreshToken = jwtUtils.createRefreshToken(jwtClaim)
 
             // update refresh token on user
-            currentHashedRefreshToken = refreshToken
+            currentHashedRefreshToken = BCryptUtils.encrypt(refreshToken)
             userRepository.save(this)
 
             SignInResponse(

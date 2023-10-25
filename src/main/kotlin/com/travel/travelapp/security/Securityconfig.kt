@@ -2,6 +2,7 @@ package com.travel.travelapp.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
 @Configuration
+@Order(0)
 class SecurityConfig(
     private val jwtUtils: JwtUtils,
 ) {
