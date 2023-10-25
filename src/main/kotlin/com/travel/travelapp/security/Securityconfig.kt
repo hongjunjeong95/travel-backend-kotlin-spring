@@ -2,7 +2,6 @@ package com.travel.travelapp.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.annotation.Order
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -14,16 +13,17 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
 
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
 @Configuration
-@Order(0)
 class SecurityConfig(
-    private val jwtUtils: JwtUtils,
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val entryPoint: AuthenticationEntryPoint
 ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -44,18 +44,15 @@ class SecurityConfig(
 
         http
             .csrf { it.disable() }
+            .headers { it.frameOptions { it.sameOrigin() } }
             .authorizeHttpRequests {
-                it
-                    .requestMatchers("/api/v1/auth/signup","/api/v1/auth/signin").permitAll()
+                it.requestMatchers("/api/v1/auth/signup","/api/v1/auth/signin").permitAll()
                     .requestMatchers(*authWhiteList).permitAll()
                     .anyRequest().authenticated()
             }
-            .sessionManagement { session ->
-                session
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .formLogin { it.disable() }
-            .addFilterAt(JwtFilter(jwtUtils),UsernamePasswordAuthenticationFilter::class.java)
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter::class.java)
+            .exceptionHandling { it.authenticationEntryPoint(entryPoint) }
         return http.build()
     }
 

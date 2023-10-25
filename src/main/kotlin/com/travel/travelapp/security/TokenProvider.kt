@@ -2,12 +2,14 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import org.springframework.stereotype.Component
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.stereotype.Service
 import java.util.*
 
-
-@Component
-class JwtUtils(private val jwtProperties: JWTProperties) {
+@Service
+class TokenProvider(
+    private val jwtProperties: JWTProperties
+) {
     private val AUTH_ALGORITHM = Algorithm.HMAC256(jwtProperties.authSecret)
     private val REFRESH_ALGORITHM = Algorithm.HMAC256(jwtProperties.refreshSecret)
 
@@ -55,4 +57,5 @@ data class JWTClaim(
     val userId: Long,
     val email: String,
     val username: String,
+    val role: Set<GrantedAuthority>
 )

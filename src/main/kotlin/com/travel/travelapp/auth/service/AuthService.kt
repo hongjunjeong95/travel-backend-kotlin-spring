@@ -10,16 +10,17 @@ import com.travel.travelapp.common.exception.UserExistsException
 import com.travel.travelapp.common.exception.UserNotFoundException
 import com.travel.travelapp.common.utils.BCryptUtils
 import com.travel.travelapp.security.JWTClaim
-import com.travel.travelapp.security.JwtUtils
+import com.travel.travelapp.security.TokenProvider
 import com.travel.travelapp.user.persistent.User
 import com.travel.travelapp.user.persistent.UserRepository
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthService(
     private val userRepository: UserRepository,
-    private val jwtUtils: JwtUtils,
+    private val tokenProvider: TokenProvider
 ) {
 
     @Transactional
@@ -35,6 +36,7 @@ class AuthService(
                 email = email,
                 password = BCryptUtils.encrypt(password),
                 username = email,
+                role = role
             )
 
             userRepository.save(user)
@@ -52,12 +54,13 @@ class AuthService(
             val jwtClaim = JWTClaim(
                 userId = id,
                 email = email,
-                username = username
+                username = username,
+                role = setOf(SimpleGrantedAuthority(role.toString()))
             )
 
             // get tokens
-            val authToken = jwtUtils.createAuthToken(jwtClaim)
-            val refreshToken = jwtUtils.createRefreshToken(jwtClaim)
+            val authToken = tokenProvider.createAuthToken(jwtClaim)
+            val refreshToken = tokenProvider.createRefreshToken(jwtClaim)
 
             // update refresh token on user
             currentHashedRefreshToken = BCryptUtils.encrypt(refreshToken)
@@ -77,10 +80,11 @@ class AuthService(
             val jwtClaim = JWTClaim(
                 userId = id,
                 email = email,
-                username = username
+                username = username,
+                role = setOf(SimpleGrantedAuthority(role.toString()))
             )
 
-            val authToken = jwtUtils.createAuthToken(jwtClaim)
+            val authToken = tokenProvider.createAuthToken(jwtClaim)
 
             RefreshResponse(
                 authToken = authToken,

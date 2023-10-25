@@ -1,7 +1,7 @@
 package com.travel.travelapp.common.interceptors
 
 import com.travel.travelapp.security.AuthorizationExtractor
-import com.travel.travelapp.security.JwtUtils
+import com.travel.travelapp.security.TokenProvider
 import jakarta.servlet.http.HttpServletRequest
 
 import jakarta.servlet.http.HttpServletResponse
@@ -11,13 +11,13 @@ import org.springframework.web.servlet.HandlerInterceptor
 
 
 @Component
-class LoginInterceptor(private val jwtUtils: JwtUtils): HandlerInterceptor {
+class LoginInterceptor(private val tokenProvider: TokenProvider): HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         if (isPreflight(request) || isSwaggerRequest(request)) {
             return true
         }
         val token: String = AuthorizationExtractor.extractAccessToken(request)
-        jwtUtils.verifyAuthToken(token)
+        tokenProvider.verifyAuthToken(token)
         return true
     }
 

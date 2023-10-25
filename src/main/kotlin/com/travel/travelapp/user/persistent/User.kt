@@ -20,5 +20,12 @@ data class User(
     var username: String,
 
     @Column(name = "current_hashed_refresh_token", nullable = true)
-    var currentHashedRefreshToken: String? = null
+    var currentHashedRefreshToken: String? = null,
+
+    @Enumerated(EnumType.STRING)
+    val role: UserRole = UserRole.USER
 ): BaseEntity()
+
+enum class UserRole {
+    USER, ADMIN, ANONYMOUS
+}

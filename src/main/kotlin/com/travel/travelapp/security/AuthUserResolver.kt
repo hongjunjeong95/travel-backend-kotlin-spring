@@ -1,6 +1,8 @@
 package com.travel.travelapp.security
 
+import com.travel.travelapp.user.persistent.UserRole
 import org.springframework.core.MethodParameter
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -29,4 +31,5 @@ data class AuthUser(
     val id: Long,
     val email: String,
     val username: String,
+    val role: Set<GrantedAuthority>
 )

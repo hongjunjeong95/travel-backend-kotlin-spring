@@ -2,13 +2,13 @@ package com.travel.travelapp
 
 import com.travel.travelapp.security.JWTClaim
 import com.travel.travelapp.security.JWTProperties
-import com.travel.travelapp.security.JwtUtils
+import com.travel.travelapp.security.TokenProvider
 import mu.KotlinLogging
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
-class JWTUtilsTest {
+class TokenProviderTest {
     private val logger = KotlinLogging.logger {}
 
     init {
@@ -20,7 +20,7 @@ class JWTUtilsTest {
             refreshSecret = "aslkdjaslkdf",
         )
 
-        val jwtUtils = JwtUtils(properties)
+        val TokenProvider = TokenProvider(properties)
 
     @Test
     fun createTokenTest() {
@@ -30,7 +30,7 @@ class JWTUtilsTest {
             username = "개발자",
         )
 
-        val token = jwtUtils.createAuthToken(jwtClaim, properties)
+        val token = TokenProvider.createAuthToken(jwtClaim, properties)
 
         assertNotNull(token)
 

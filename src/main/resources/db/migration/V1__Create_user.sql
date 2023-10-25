@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
---     role VARCHAR(255) NULL,
+    role VARCHAR(255) NULL,
     current_hashed_refresh_token VARCHAR(255) NULL
 );
