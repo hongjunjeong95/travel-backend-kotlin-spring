@@ -16,3 +16,7 @@ data class SignInResponse(
     val authToken: String,
     val refreshToken: String,
 )
+
+data class RefreshResponse(
+    val authToken: String,
+)

@@ -1,5 +1,6 @@
 package com.travel.travelapp.auth.api
 
+import com.travel.travelapp.auth.api.dto.RefreshResponse
 import com.travel.travelapp.auth.api.dto.SignInBody
 import com.travel.travelapp.auth.api.dto.SignInResponse
 import com.travel.travelapp.auth.api.dto.SignUpBody
@@ -18,10 +19,7 @@ class AuthController(private val authService: AuthService) {
     fun signIn(@RequestBody signInBody: SignInBody): SignInResponse=authService.signIn(signInBody)
 
     @GetMapping("/refresh")
-    fun refresh(@Parameter(hidden = true) user:AuthUser): AuthUser{
-        println("start")
-        println(user)
-        println("end")
-        return user
+    fun refresh(@Parameter(hidden = true) user:AuthUser): RefreshResponse{
+        return authService.refresh(user.id)
     }
 }

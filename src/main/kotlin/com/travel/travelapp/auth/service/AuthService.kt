@@ -1,5 +1,6 @@
 package com.travel.travelapp.auth.service
 
+import com.travel.travelapp.auth.api.dto.RefreshResponse
 import com.travel.travelapp.auth.api.dto.SignInBody
 import com.travel.travelapp.auth.api.dto.SignInResponse
 import com.travel.travelapp.auth.api.dto.SignUpBody
@@ -71,31 +72,18 @@ class AuthService(
     }
 
     @Transactional()
-    fun refresh(signInBody: SignInBody): SignInResponse {
-        return with(userRepository.findByEmail(signInBody.email) ?: throw UserNotFoundException()) {
-            val verified = BCryptUtils.verify(signInBody.password, password)
-            if (!verified) {
-                throw PasswordNotMatchedException()
-            }
-
+    fun refresh(userId:Long): RefreshResponse {
+        return with(userRepository.findById(userId).get()) {
             val jwtClaim = JWTClaim(
                 userId = id,
                 email = email,
                 username = username
             )
 
-            // get tokens
             val authToken = jwtUtils.createAuthToken(jwtClaim)
-            val refreshToken = jwtUtils.createRefreshToken(jwtClaim)
 
-            // update refresh token on user
-            currentHashedRefreshToken = refreshToken
-            userRepository.save(this)
-
-            SignInResponse(
-                email = email,
+            RefreshResponse(
                 authToken = authToken,
-                refreshToken = refreshToken
             )
         }
     }
