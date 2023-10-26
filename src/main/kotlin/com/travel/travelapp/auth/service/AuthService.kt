@@ -1,6 +1,5 @@
 package com.travel.travelapp.auth.service
 
-import com.travel.travelapp.auth.api.dto.RefreshResponse
 import com.travel.travelapp.auth.api.dto.SignInBody
 import com.travel.travelapp.auth.api.dto.SignInResponse
 import com.travel.travelapp.auth.api.dto.SignUpBody
@@ -13,7 +12,6 @@ import com.travel.travelapp.security.JWTClaim
 import com.travel.travelapp.security.TokenProvider
 import com.travel.travelapp.user.persistent.User
 import com.travel.travelapp.user.persistent.UserRepository
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -68,24 +66,6 @@ class AuthService(
                 email = email,
                 authToken = authToken,
                 refreshToken = refreshToken
-            )
-        }
-    }
-
-    @Transactional()
-    fun refresh(userId:Long): RefreshResponse {
-        return with(userRepository.findById(userId).get()) {
-            val jwtClaim = JWTClaim(
-                userId = id,
-                email = email,
-                username = username,
-                role = role
-            )
-
-            val authToken = tokenProvider.createAuthToken(jwtClaim)
-
-            RefreshResponse(
-                authToken = authToken,
             )
         }
     }
