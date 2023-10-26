@@ -1,6 +1,8 @@
 package com.travel.travelapp.common.exception
 
+import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import com.auth0.jwt.exceptions.SignatureVerificationException
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -15,6 +17,20 @@ class GlobalExceptionHandler {
         logger.error { ex.message }
 
         return ErrorResponse(code = ex.code, message = ex.message)
+    }
+
+    @ExceptionHandler(SignatureVerificationException::class)
+    fun handleSignatureVerificationException(ex: SignatureVerificationException) : ErrorResponse {
+        logger.error { ex.message }
+
+        return ErrorResponse(code = 401, message = "Token is not verified")
+    }
+
+    @ExceptionHandler(JWTDecodeException::class)
+    fun handleJWTDecodeException(ex: JWTDecodeException) : ErrorResponse {
+        logger.error { ex.message }
+
+        return ErrorResponse(code = 401, message = "Token is null")
     }
 
     @ExceptionHandler(TokenExpiredException::class)

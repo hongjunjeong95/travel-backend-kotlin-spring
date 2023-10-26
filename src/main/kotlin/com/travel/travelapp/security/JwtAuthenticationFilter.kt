@@ -1,6 +1,7 @@
 package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.TokenExpiredException
+import com.auth0.jwt.interfaces.DecodedJWT
 import com.travel.travelapp.user.persistent.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -24,35 +25,34 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         try {
             val token = parseBearerToken(request)
-            val result = tokenProvider.verifyAuthToken(token)
+            val decodedJwt = tokenProvider.verifyAuthToken(token)
 
-            if (result.success) {
-                val userId = result.decodedJwt.subject.toLong()
-                val claims = result.decodedJwt.claims
-                val email = claims["email"]?.asString() ?: ""
-                val username = claims["username"]?.asString() ?: ""
-                val role = claims["role"]?.asString() ?: "anonymous"
-
-                val authUser = AuthUser(
-                    id = userId,
-                    email = email,
-                    username = username,
-                    role = setOf(SimpleGrantedAuthority(role))
-                )
-                UsernamePasswordAuthenticationToken(
-                    authUser, null, authUser.role
-                )
-                    .apply { details = WebAuthenticationDetails(request) }
-                    .also { SecurityContextHolder.getContext().authentication = it }
-            } else {
-                val expiredOn = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()
-                throw TokenExpiredException("Token is not valid",expiredOn)
-            }
+            val authUser = parseUser(decodedJwt)
+            UsernamePasswordAuthenticationToken(
+                authUser, null, authUser.role
+            )
+                .apply { details = WebAuthenticationDetails(request) }
+                .also { SecurityContextHolder.getContext().authentication = it }
         } catch (e: Exception) {
             request.setAttribute("exception", e)
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    private fun parseUser(decodedJwt:DecodedJWT):AuthUser{
+        val userId = decodedJwt.subject.toLong()
+        val claims = decodedJwt.claims
+        val email = claims["email"]?.asString() ?: ""
+        val username = claims["username"]?.asString() ?: ""
+        val role = claims["role"]?.asString() ?: "anonymous"
+
+        return AuthUser(
+            id = userId,
+            email = email,
+            username = username,
+            role = setOf(SimpleGrantedAuthority(role))
+        )
     }
 
     private fun parseBearerToken(request: HttpServletRequest) = request.getHeader(HttpHeaders.AUTHORIZATION)

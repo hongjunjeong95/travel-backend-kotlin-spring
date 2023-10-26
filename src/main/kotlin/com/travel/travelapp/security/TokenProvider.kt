@@ -2,6 +2,7 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
 import com.travel.travelapp.user.persistent.UserRole
 import org.springframework.stereotype.Service
 import java.util.*
@@ -35,14 +36,8 @@ class TokenProvider(
             .sign(REFRESH_ALGORITHM)
     }
 
-    fun verifyAuthToken(token: String?): VerifyResult =
-        try {
-            val decodedJwt = JWT.require(AUTH_ALGORITHM).build().verify(token)
-            VerifyResult(true, decodedJwt)
-        } catch (ex: Exception) {
-            val decodedJwt = JWT.decode(token)
-            VerifyResult(false, decodedJwt)
-        }
+    fun verifyAuthToken(token: String?): DecodedJWT =
+        JWT.require(AUTH_ALGORITHM).build().verify(token)
 
     fun verifyRefreshToken(token: String?): VerifyResult =
         try {
