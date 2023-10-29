@@ -1,15 +1,20 @@
-package com.travel.travelapp.auth.api.dto
+package com.travel.travelapp.auth.service
 
 import com.travel.travelapp.user.persistent.UserRole
 
-data class SignUpBody(
+data class SignUpParam(
     val email: String,
     val password: String,
     val confirmPassword:String,
     val role: UserRole
 )
 
-data class SignInBody(
+data class SignInParam(
     val email: String,
     val password: String,
+)
+
+data class SignInReturn(
+    val authToken: String,
+    val refreshToken: String,
 )

@@ -1,8 +1,5 @@
 package com.travel.travelapp.auth.service
 
-import com.travel.travelapp.auth.api.dto.SignInBody
-import com.travel.travelapp.auth.api.dto.SignInResponse
-import com.travel.travelapp.auth.api.dto.SignUpBody
 import com.travel.travelapp.common.exception.PasswordNotMatchException
 import com.travel.travelapp.common.exception.PasswordNotMatchedException
 import com.travel.travelapp.common.exception.UserExistsException
@@ -22,8 +19,8 @@ class AuthService(
 ) {
 
     @Transactional
-    fun signUp(signUpBody: SignUpBody) {
-        with(signUpBody){
+    fun signUp(param: SignUpParam) {
+        with(param){
             userRepository.findByEmail(email)?.let{
                 throw UserExistsException()
             }
@@ -42,9 +39,9 @@ class AuthService(
     }
 
     @Transactional()
-    fun signIn(signInBody: SignInBody): SignInResponse {
-        return with(userRepository.findByEmail(signInBody.email) ?: throw UserNotFoundException()) {
-            val verified = BCryptUtils.verify(signInBody.password, password)
+    fun signIn(param: SignInParam): SignInReturn {
+        return with(userRepository.findByEmail(param.email) ?: throw UserNotFoundException()) {
+            val verified = BCryptUtils.verify(param.password, password)
             if (!verified) {
                 throw PasswordNotMatchedException()
             }
@@ -62,8 +59,7 @@ class AuthService(
             currentHashedRefreshToken = BCryptUtils.encrypt(refreshToken)
             userRepository.save(this)
 
-            SignInResponse(
-                email = email,
+            SignInReturn(
                 authToken = authToken,
                 refreshToken = refreshToken
             )
