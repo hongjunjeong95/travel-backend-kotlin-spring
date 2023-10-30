@@ -13,7 +13,7 @@ import org.springdoc.core.customizers.OperationCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.HandlerMethod
-private const val SECURITY_SCHEME_NAME = "authorization"
+private const val SECURITY_SCHEME_NAME = "uthorization"
 
 @Configuration
 class SwaggerConfig {
@@ -32,12 +32,12 @@ class SwaggerConfig {
             .description("스프링시큐리티와 JWT를 이용한 사용자 인증 예제입니다.")
             .version("1.0.0"))
 
-    @Bean
-    fun globalHeader() = OperationCustomizer { operation: Operation, _: HandlerMethod ->
-        operation.addParametersItem(Parameter()
-            .`in`(ParameterIn.HEADER.toString())
-            .schema(StringSchema().name("Refresh-Token"))
-            .name("Refresh-Token"))
-        operation
-    }
+//    @Bean
+//    fun globalHeader() = OperationCustomizer { operation: Operation, _: HandlerMethod ->
+//        operation.addParametersItem(Parameter()
+//            .`in`(ParameterIn.HEADER.toString())
+//            .schema(StringSchema().name("Refresh-Token"))
+//            .name("Refresh-Token"))
+//        operation
+//    }
 }

@@ -9,10 +9,5 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository,
 ) {
-    fun get(id: Long): User {
-        return userRepository.findById(id).get()
-    }
-
-    fun getMemberInfo(id: Long) = userRepository.findByIdOrThrow(id, "존재하지 않는 회원입니다.")
-
+    fun me(id: Long):User = userRepository.findByIdOrThrow(id, "존재하지 않는 회원입니다.")
 }

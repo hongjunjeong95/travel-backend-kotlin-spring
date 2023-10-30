@@ -50,7 +50,7 @@ class AuthController(private val authService: AuthService,private val jwtPropert
             .path("/")
             .build()
 
-        val refreshCookie = ResponseCookie.from("Refresh-token", result.refreshToken)
+        val refreshCookie = ResponseCookie.from("Refresh-Token", result.refreshToken)
             .maxAge(jwtProperties.refreshExpiresTime)
             .httpOnly(true)
             .path("/")

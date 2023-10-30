@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePerRequestFilter() {
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         try {
-            val token = parseBearerToken(request, HttpHeaders.AUTHORIZATION) ?: throw JWTDecodeException("Token is null")
+            val token = extractCookie(request, "Authorization")  ?: throw JWTDecodeException("Token is null")
             val authUser = parseAuthUser(token)
             UsernamePasswordAuthenticationToken(
                 authUser, null, authUser.role
@@ -36,10 +36,19 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
         filterChain.doFilter(request, response)
     }
 
+    private fun extractCookie(req: HttpServletRequest, cookieName: String): String? {
+        for (c in req.cookies) {
+            if (c.name == cookieName) {
+                return c.value
+            }
+        }
+        return null
+    }
+
     private fun reissueAccessToken(request: HttpServletRequest, response: HttpServletResponse, exception: Exception) {
         try {
-            val refreshToken = parseBearerToken(request, "Refresh-Token") ?: throw exception
-            val oldAccessToken = parseBearerToken(request, HttpHeaders.AUTHORIZATION)!!
+            val refreshToken = extractCookie(request, "Refresh-Token") ?: throw exception
+            val oldAccessToken = extractCookie(request, "Authorization")!!
             tokenProvider.verifyRefreshToken(refreshToken, oldAccessToken)
 
             val jwtClaim:JWTClaim = parseJwtCalims(oldAccessToken)
@@ -87,7 +96,4 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
             role = setOf(SimpleGrantedAuthority(role))
         )
     }
-
-    private fun parseBearerToken(request: HttpServletRequest, headerName: String) = request.getHeader(headerName)
-        .takeIf { it?.startsWith("Bearer ", true) ?: false }?.substring(7)
 }

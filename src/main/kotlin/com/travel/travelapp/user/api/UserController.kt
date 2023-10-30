@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/users")
 class UserController(private val userService: UserService) {
     @Operation(summary = "회원 정보 조회")
-    @GetMapping
-    fun getMemberInfo(@AuthenticationPrincipal user: AuthUser) =
-        ApiResponse.success(userService.getMemberInfo(user.id))
+    @GetMapping("/me")
+    fun me(@AuthenticationPrincipal user: AuthUser) =
+        ApiResponse.success(userService.me(user.id))
 }
