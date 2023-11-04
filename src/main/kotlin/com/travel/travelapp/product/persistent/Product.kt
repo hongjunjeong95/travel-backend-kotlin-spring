@@ -1,11 +1,10 @@
 package com.travel.travelapp.product.persistent
 
 import com.travel.travelapp.common.persistent.BaseEntity
+import com.travel.travelapp.productGroupList.persistent.ProductGroupList
 import com.vladmihalcea.hibernate.type.json.JsonType
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
 
 @Entity
@@ -14,17 +13,19 @@ data class Product(
     @Column(name = "title")
     var title: String,
 
-    @Column(name = "price", columnDefinition = "int")
+    @Column(name = "price")
     var price: Int,
 
-    @Column(name = "image_url", columnDefinition = "string")
+    @Column(name = "image_url")
     var imageUrl: String,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "json")
     var details: List<ProductDetails>,
 
-
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    val productGroupList:  List<ProductGroupList> = emptyList()
 
 //    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
 //    @CollectionTable(name = "books", joinColumns = @JoinColumn(name = "library_id"))
