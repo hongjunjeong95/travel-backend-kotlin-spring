@@ -1,6 +1,5 @@
 package com.travel.travelapp.security
 
-import com.travel.travelapp.user.persistent.UserRole
 import org.springframework.core.MethodParameter
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder

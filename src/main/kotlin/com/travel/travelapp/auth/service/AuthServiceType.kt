@@ -2,6 +2,7 @@ package com.travel.travelapp.auth.service
 
 import com.travel.travelapp.user.persistent.UserRole
 
+
 data class SignUpParam(
     val email: String,
     val password: String,
