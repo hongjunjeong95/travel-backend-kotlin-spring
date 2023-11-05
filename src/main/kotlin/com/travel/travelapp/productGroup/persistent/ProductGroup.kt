@@ -18,7 +18,7 @@ data class ProductGroup(
     @ColumnDefault(ProductGroupStatus.invisible)
     var status: String = ProductGroupStatus.invisible,
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_group_id")
     val productGroupList:  List<ProductGroupList> = emptyList()
 ): BaseEntity()

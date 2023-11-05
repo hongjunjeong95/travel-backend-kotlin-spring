@@ -23,7 +23,7 @@ data class Product(
     @Column(columnDefinition = "json")
     var details: List<ProductDetails>,
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val productGroupList:  List<ProductGroupList> = emptyList()
 

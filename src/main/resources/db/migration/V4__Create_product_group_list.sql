@@ -8,5 +8,6 @@ CREATE TABLE `product_group_list` (
     KEY `FK9mgjw7mdocnytoi2a45jo4vgc` (`product_id`),
     KEY `FKgox76pyv0kmrobtr95xyngamo` (`product_group_id`),
     CONSTRAINT `FK9mgjw7mdocnytoi2a45jo4vgc` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-    CONSTRAINT `FKgox76pyv0kmrobtr95xyngamo` FOREIGN KEY (`product_group_id`) REFERENCES `product_group` (`id`)
+    CONSTRAINT `FKgox76pyv0kmrobtr95xyngamo` FOREIGN KEY (`product_group_id`) REFERENCES `product_group` (`id`),
+    UNIQUE KEY `product_product_group_uk` (`product_id`,`product_group_id`)
 );

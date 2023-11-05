@@ -33,4 +33,4 @@ jwt:
   refreshExpiresTime: 360000000
 logging:
   level:
-    root: trace
+    root: error

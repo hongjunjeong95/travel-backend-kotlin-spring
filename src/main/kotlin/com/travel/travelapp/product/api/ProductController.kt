@@ -18,18 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 @ProduerAuthorize
 @RestController
 @RequestMapping("/api/v1/products")
-class ProductController(private val productService: ProductService) {
+class ProductController(private val productFacade: ProductFacade) {
     @Operation(summary = "상품 생성")
     @PostMapping
     fun create(@RequestBody body: CreateProductBody): ApiResponse<Unit> =
-        ApiResponse.success(productService.create(
-            with(body){
-                CreateProductParam(
-                    title = title,
-                    price = price,
-                    imageUrl = imageUrl,
-                    details = details
-                )
-            }
-        ))
+        ApiResponse.success(productFacade.create(body))
 }
