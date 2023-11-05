@@ -23,5 +23,5 @@ data class User(
 ): BaseEntity()
 
 enum class UserRole {
-    USER, ADMIN, ANONYMOUS
+    USER, PRODUCER, ADMIN, ANONYMOUS
 }

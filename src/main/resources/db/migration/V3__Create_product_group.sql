@@ -4,5 +4,6 @@ CREATE TABLE `product_group` (
      updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
      deleted_at TIMESTAMP(6),
     `order` int DEFAULT NULL,
-    `title` varchar(255) DEFAULT NULL
+    `title` varchar(255) DEFAULT NULL,
+    `status` varchar(255) DEFAULT 'invisible'
 );
