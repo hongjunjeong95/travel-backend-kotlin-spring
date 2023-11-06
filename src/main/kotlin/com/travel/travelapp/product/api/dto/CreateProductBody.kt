@@ -14,5 +14,5 @@ data class CreateProductBody(
     @Schema(description = "이미지 주소", example = "http://image.address")
     val imageUrl: String,
 
-    val details: List<ProductDetails>,
+    val details: MutableList<ProductDetails>,
 )

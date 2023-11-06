@@ -3,6 +3,8 @@ package com.travel.travelapp.productGroup.api
 import com.travel.travelapp.common.dto.ApiResponse
 import com.travel.travelapp.productGroup.api.dto.AddProductToGroupBody
 import com.travel.travelapp.productGroup.api.dto.CreateProductGroupBody
+import com.travel.travelapp.productGroup.api.dto.ProductGroupsResponse
+import com.travel.travelapp.productGroup.persistent.ProductGroup
 import com.travel.travelapp.security.ProduerAuthorize
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -28,8 +30,8 @@ class ProductGroupController(
     ): ApiResponse<Unit> =
         ApiResponse.success(productGroupFacade.addProductToGroup(id, body))
 
-//    @Operation(summary = "상품 그룹 리스트 조회")
-//    @GetMapping
-//    fun findAll(): ApiResponse<Unit> =
-//        ApiResponse.success(productGroupFacade.findAll())
+    @Operation(summary = "상품 그룹 리스트 조회")
+    @GetMapping
+    fun findAll(): ApiResponse<ProductGroupsResponse> =
+        ApiResponse.success(ProductGroupsResponse.of(productGroupFacade.findAll()))
 }

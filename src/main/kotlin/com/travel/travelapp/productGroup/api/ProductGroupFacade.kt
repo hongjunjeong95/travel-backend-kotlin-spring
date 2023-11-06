@@ -4,20 +4,19 @@ import com.travel.travelapp.product.service.ProductService
 import com.travel.travelapp.productGroup.api.dto.AddProductToGroupBody
 import com.travel.travelapp.productGroup.api.dto.CreateProductGroupBody
 import com.travel.travelapp.productGroup.persistent.ProductGroup
-import com.travel.travelapp.productGroup.service.CreateProductGroupParam
+import com.travel.travelapp.productGroup.persistent.ProductGroupStatus
 import com.travel.travelapp.productGroup.service.ProductGroupService
 import com.travel.travelapp.productGroupList.persistent.ProductGroupList
 import com.travel.travelapp.productGroupList.service.ProductGroupListService
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.Exception
 
 @Service
 class ProductGroupFacade(
     private val productGroupService: ProductGroupService,
     private val productService: ProductService,
-    private val productGroupListService: ProductGroupListService
+    private val productGroupListService: ProductGroupListService,
 ) {
     @Transactional
     fun create(body: CreateProductGroupBody) {
@@ -49,4 +48,7 @@ class ProductGroupFacade(
             throw Exception("Server error")
         }
     }
+
+    @Transactional
+    fun findAll(): List<ProductGroup> = productGroupService.findByStatusOrderByOrderDesc(status = ProductGroupStatus.visible)
 }

@@ -11,4 +11,6 @@ class ProductService(
 ):CommonService<Product>(productRepository) {
     fun create(param: Product) =
         productRepository.save(param)
+
+    fun findByIdIn(ids: List<Long>) = productRepository.findByIdIn(ids)
 }

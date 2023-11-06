@@ -9,7 +9,7 @@ import org.hibernate.annotations.Type
 
 @Entity
 @Table(name = "product")
-data class Product(
+class Product(
     @Column(name = "title")
     var title: String,
 
@@ -21,9 +21,9 @@ data class Product(
 
     @Type(JsonType::class)
     @Column(columnDefinition = "json")
-    var details: List<ProductDetails>,
+    var details: MutableList<ProductDetails> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val productGroupList:  List<ProductGroupList> = emptyList()
 

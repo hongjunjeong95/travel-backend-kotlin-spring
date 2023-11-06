@@ -9,7 +9,8 @@ import org.springframework.web.server.ResponseStatusException
 open class CommonService<T: BaseEntity>(
     private val repository: BaseRepository<T, Long>
 ) {
-    open fun findById(id: Long): T {
-        return repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-    }
+    open fun findById(id: Long): T =
+         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+
+    open fun findAll():List<T> = repository.findAll()
 }

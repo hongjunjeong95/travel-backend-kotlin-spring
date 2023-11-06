@@ -9,8 +9,3 @@ data class CreateProductGroupBody(
     @Schema(description = "메이 테마에서 순서", example = "1", type = "int")
     val order: Int,
 )
-
-data class AddProductToGroupBody(
-    @Schema(description = "product id", example = "1")
-    val productId: Long,
-)

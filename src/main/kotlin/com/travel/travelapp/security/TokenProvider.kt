@@ -26,7 +26,7 @@ class TokenProvider(
             .withClaim("email", claim.email)
             .withClaim("username", claim.username)
             .withClaim("role", claim.role.toString())
-            .sign(AUTH_ALGORITHM)
+            .sign(AUTH_ALGORITHM)!!
 
     fun createRefreshToken(claim: JWTClaim): String {
         return JWT.create()

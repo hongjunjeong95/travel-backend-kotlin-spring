@@ -7,20 +7,32 @@ import mu.KotlinLogging
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import com.ninjasquad.springmockk.MockkBean
+import com.travel.travelapp.user.persistent.UserRepository
+import com.travel.travelapp.user.persistent.UserRole
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.test.context.junit.jupiter.SpringExtension
 
+@ExtendWith(SpringExtension::class)
 class TokenProviderTest {
     private val logger = KotlinLogging.logger {}
+    @MockkBean lateinit var userRepository: UserRepository
+    private lateinit var tokenProvider: TokenProvider
 
-    init {
-        val properties = JWTProperties(
-            issuer = "travelapp",
-            authExpiresTime = 3600,
-            authSecret = "asldkfjsalkdj",
-            refreshExpiresTime = 3600,
-            refreshSecret = "aslkdjaslkdf",
-        )
+    private val properties = JWTProperties(
+        issuer = "travelapp",
+        authExpiresTime = 3600,
+        authSecret = "asldkfjsalkdj",
+        refreshExpiresTime = 3600,
+        refreshSecret = "aslkdjaslkdf",
+    )
 
-        val TokenProvider = TokenProvider(properties)
+    @BeforeEach
+    fun setUp() {
+        tokenProvider = TokenProvider(properties, userRepository)
+    }
+
 
     @Test
     fun createTokenTest() {
@@ -28,9 +40,10 @@ class TokenProviderTest {
             userId = 1,
             email = "dev@gmail.com",
             username = "개발자",
+            role = UserRole.PRODUCER
         )
 
-        val token = TokenProvider.createAuthToken(jwtClaim, properties)
+        val token = tokenProvider.createAuthToken(jwtClaim)
 
         assertNotNull(token)
 
@@ -43,13 +56,14 @@ class TokenProviderTest {
             userId = 1,
             email = "dev@gmail.com",
             username = "개발자",
+            role = UserRole.PRODUCER
         )
 
-        val token = JWTUtil.createAuthToken(jwtClaim, properties)
+        val token = tokenProvider.createAuthToken(jwtClaim)
 
-        val verifyResult = JWTUtil.verify(token)
+        val decodedJwt = tokenProvider.verifyAuthToken(token)
 
-        with(verifyResult.decodedJwt){
+        with(decodedJwt){
             logger.info { "claims : $claims" }
 
             val userId = subject.toLong()
@@ -61,20 +75,5 @@ class TokenProviderTest {
             val username = claims["username"]!!.asString()
             assertEquals(username, jwtClaim.username)
         }
-
-//        with(decode) {
-//            logger.info { "claims : $claims" }
-//
-//            val userId = claims["userId"]!!.asLong()
-//            assertEquals(userId, jwtClaim.userId)
-//
-//            val email = claims["email"]!!.asString()
-//            assertEquals(email, jwtClaim.email)
-//
-//            val username = claims["username"]!!.asString()
-//            assertEquals(username, jwtClaim.username)
-//        }
-    }
-
     }
 }
