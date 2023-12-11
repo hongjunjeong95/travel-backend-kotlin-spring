@@ -15,12 +15,12 @@ abstract class BaseEntity(
 
     @CreatedDate
     @Column(name = "created_at")
-    var createdAt: LocalDateTime? = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    var updatedAt: LocalDateTime? = LocalDateTime.now(),
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "deleted_at", nullable = true)
     var deletedAt: LocalDateTime? = null
-    )
+)
