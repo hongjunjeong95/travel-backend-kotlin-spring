@@ -1,6 +1,6 @@
 package com.travel.travelapp.auth.service
 
-import com.travel.travelapp.user.persistent.UserRole
+import com.travel.travelapp.domain.user.persistent.UserRole
 
 
 data class SignUpParam(

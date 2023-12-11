@@ -1,10 +1,10 @@
-package com.travel.travelapp.productGroup.api
+package com.travel.travelapp.domain.productGroup.api
 
 import com.travel.travelapp.common.dto.ApiResponse
-import com.travel.travelapp.productGroup.api.dto.AddProductToGroupBody
-import com.travel.travelapp.productGroup.api.dto.CreateProductGroupBody
-import com.travel.travelapp.productGroup.api.dto.ProductGroupsResponse
-import com.travel.travelapp.productGroup.persistent.ProductGroup
+import com.travel.travelapp.domain.productGroup.api.dto.AddProductToGroupBody
+import com.travel.travelapp.domain.productGroup.api.dto.CreateProductGroupBody
+import com.travel.travelapp.domain.productGroup.api.dto.ProductGroupsResponse
+import com.travel.travelapp.domain.productGroup.persistent.ProductGroup
 import com.travel.travelapp.security.ProduerAuthorize
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

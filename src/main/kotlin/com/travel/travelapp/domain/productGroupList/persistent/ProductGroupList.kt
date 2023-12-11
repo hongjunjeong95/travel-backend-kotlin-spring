@@ -1,9 +1,9 @@
-package com.travel.travelapp.productGroupList.persistent
+package com.travel.travelapp.domain.productGroupList.persistent
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.travel.travelapp.common.persistent.BaseEntity
 import com.travel.travelapp.domain.product.persistent.Product
-import com.travel.travelapp.productGroup.persistent.ProductGroup
+import com.travel.travelapp.domain.productGroup.persistent.ProductGroup
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
@@ -25,5 +25,5 @@ class ProductGroupList(
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "product_group_id")
-    val productGroup:ProductGroup
+    val productGroup: ProductGroup
 ):BaseEntity()

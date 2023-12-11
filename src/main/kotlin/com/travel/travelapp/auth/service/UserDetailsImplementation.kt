@@ -1,6 +1,6 @@
 package com.travel.travelapp.auth.service
 
-import com.travel.travelapp.user.persistent.User
+import com.travel.travelapp.domain.user.persistent.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.userdetails.UserDetails

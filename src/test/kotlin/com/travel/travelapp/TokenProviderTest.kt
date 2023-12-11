@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import com.ninjasquad.springmockk.MockkBean
-import com.travel.travelapp.user.persistent.UserRepository
-import com.travel.travelapp.user.persistent.UserRole
+import com.travel.travelapp.domain.user.persistent.UserRepository
+import com.travel.travelapp.domain.user.persistent.UserRole
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension

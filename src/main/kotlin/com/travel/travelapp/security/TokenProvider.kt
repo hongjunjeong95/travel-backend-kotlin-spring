@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.travel.travelapp.common.utils.BCryptUtils
-import com.travel.travelapp.user.persistent.UserRepository
-import com.travel.travelapp.user.persistent.UserRole
+import com.travel.travelapp.domain.user.persistent.UserRepository
+import com.travel.travelapp.domain.user.persistent.UserRole
 import org.springframework.stereotype.Service
 import java.util.*
 

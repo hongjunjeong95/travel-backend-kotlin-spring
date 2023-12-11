@@ -1,4 +1,4 @@
-package com.travel.travelapp.productGroupList.persistent
+package com.travel.travelapp.domain.productGroupList.persistent
 
 import com.travel.travelapp.common.persistent.BaseRepository
 

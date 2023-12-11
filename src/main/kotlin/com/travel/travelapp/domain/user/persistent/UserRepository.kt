@@ -1,4 +1,4 @@
-package com.travel.travelapp.user.persistent
+package com.travel.travelapp.domain.user.persistent
 
 import com.travel.travelapp.common.persistent.BaseRepository
 

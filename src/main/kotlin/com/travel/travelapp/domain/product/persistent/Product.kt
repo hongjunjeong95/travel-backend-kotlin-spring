@@ -1,7 +1,7 @@
 package com.travel.travelapp.domain.product.persistent
 
 import com.travel.travelapp.common.persistent.BaseEntity
-import com.travel.travelapp.productGroupList.persistent.ProductGroupList
+import com.travel.travelapp.domain.productGroupList.persistent.ProductGroupList
 import com.vladmihalcea.hibernate.type.json.JsonType
 import au.com.console.kassava.kotlinEquals
 import au.com.console.kassava.kotlinHashCode

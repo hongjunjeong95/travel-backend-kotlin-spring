@@ -1,4 +1,4 @@
-package com.travel.travelapp.productGroup.service
+package com.travel.travelapp.domain.productGroup.service
 
 data class CreateProductGroupParam2(
     val title: String,

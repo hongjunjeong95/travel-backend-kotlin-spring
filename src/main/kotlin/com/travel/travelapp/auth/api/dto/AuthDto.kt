@@ -1,6 +1,6 @@
 package com.travel.travelapp.auth.api.dto
 
-import com.travel.travelapp.user.persistent.UserRole
+import com.travel.travelapp.domain.user.persistent.UserRole
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 //import jakarta.validation.constraints.Email

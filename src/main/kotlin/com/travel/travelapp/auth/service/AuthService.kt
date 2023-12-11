@@ -7,8 +7,8 @@ import com.travel.travelapp.common.exception.UserNotFoundException
 import com.travel.travelapp.common.utils.BCryptUtils
 import com.travel.travelapp.security.JWTClaim
 import com.travel.travelapp.security.TokenProvider
-import com.travel.travelapp.user.persistent.User
-import com.travel.travelapp.user.persistent.UserRepository
+import com.travel.travelapp.domain.user.persistent.User
+import com.travel.travelapp.domain.user.persistent.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

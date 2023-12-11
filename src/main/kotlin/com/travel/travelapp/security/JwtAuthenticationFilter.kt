@@ -2,7 +2,7 @@ package com.travel.travelapp.security
 
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.travel.travelapp.user.persistent.UserRole
+import com.travel.travelapp.domain.user.persistent.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

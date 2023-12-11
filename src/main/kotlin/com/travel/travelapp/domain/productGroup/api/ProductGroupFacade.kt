@@ -1,13 +1,13 @@
-package com.travel.travelapp.productGroup.api
+package com.travel.travelapp.domain.productGroup.api
 
 import com.travel.travelapp.domain.product.service.ProductService
-import com.travel.travelapp.productGroup.api.dto.AddProductToGroupBody
-import com.travel.travelapp.productGroup.api.dto.CreateProductGroupBody
-import com.travel.travelapp.productGroup.persistent.ProductGroup
-import com.travel.travelapp.productGroup.persistent.ProductGroupStatus
-import com.travel.travelapp.productGroup.service.ProductGroupService
-import com.travel.travelapp.productGroupList.persistent.ProductGroupList
-import com.travel.travelapp.productGroupList.service.ProductGroupListService
+import com.travel.travelapp.domain.productGroup.api.dto.AddProductToGroupBody
+import com.travel.travelapp.domain.productGroup.api.dto.CreateProductGroupBody
+import com.travel.travelapp.domain.productGroup.persistent.ProductGroup
+import com.travel.travelapp.domain.productGroup.persistent.ProductGroupStatus
+import com.travel.travelapp.domain.productGroup.service.ProductGroupService
+import com.travel.travelapp.domain.productGroupList.persistent.ProductGroupList
+import com.travel.travelapp.domain.productGroupList.service.ProductGroupListService
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +20,7 @@ class ProductGroupFacade(
 ) {
     @Transactional
     fun create(body: CreateProductGroupBody) {
-        productGroupService.create(
+        productGroupService.save(
             with(body){
                 ProductGroup(
                     title = title,
@@ -36,7 +36,7 @@ class ProductGroupFacade(
         val productGroup = productGroupService.findById(id)
 
         try {
-            productGroupListService.create(
+            productGroupListService.save(
                 ProductGroupList(
                     product = product,
                     productGroup = productGroup
