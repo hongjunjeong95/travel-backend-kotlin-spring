@@ -1,6 +1,6 @@
-package com.travel.travelapp.product.service
+package com.travel.travelapp.domain.product.service
 
-import com.travel.travelapp.product.persistent.ProductDetails
+import com.travel.travelapp.domain.product.persistent.ProductDetails
 
 
 data class CreateProductParam(

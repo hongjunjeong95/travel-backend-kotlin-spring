@@ -2,7 +2,7 @@ package com.travel.travelapp.productGroupList.persistent
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.travel.travelapp.common.persistent.BaseEntity
-import com.travel.travelapp.product.persistent.Product
+import com.travel.travelapp.domain.product.persistent.Product
 import com.travel.travelapp.productGroup.persistent.ProductGroup
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -20,7 +20,7 @@ class ProductGroupList(
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    val product:Product,
+    val product: Product,
 
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)

@@ -3,7 +3,7 @@ package com.travel.travelapp.user.api
 import com.travel.travelapp.common.dto.ApiResponse
 import com.travel.travelapp.security.AuthUser
 import com.travel.travelapp.security.UserAuthorize
-import com.travel.travelapp.product.service.ProductService
+import com.travel.travelapp.domain.product.service.ProductService
 import com.travel.travelapp.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

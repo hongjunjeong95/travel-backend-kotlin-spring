@@ -1,7 +1,7 @@
-package com.travel.travelapp.product.api.dto
+package com.travel.travelapp.domain.product.api.dto
 
-import com.travel.travelapp.product.persistent.Product
-import com.travel.travelapp.product.persistent.ProductDetails
+import com.travel.travelapp.domain.product.persistent.Product
+import com.travel.travelapp.domain.product.persistent.ProductDetails
 
 data class ProductResponse(
         val id: Long,

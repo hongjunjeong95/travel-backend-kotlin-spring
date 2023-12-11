@@ -15,8 +15,15 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
 
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
+}
+
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -38,6 +45,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-mysql")
 	implementation("com.vladmihalcea:hibernate-types-60:2.20.0")
 	runtimeOnly("com.mysql:mysql-connector-j")
+	implementation("au.com.console:kassava:2.1.0")
 
 	// logging
 	implementation("io.github.microutils:kotlin-logging:3.0.5")

@@ -1,8 +1,11 @@
-package com.travel.travelapp.product.persistent
+package com.travel.travelapp.domain.product.persistent
 
 import com.travel.travelapp.common.persistent.BaseEntity
 import com.travel.travelapp.productGroupList.persistent.ProductGroupList
 import com.vladmihalcea.hibernate.type.json.JsonType
+import au.com.console.kassava.kotlinEquals
+import au.com.console.kassava.kotlinHashCode
+import au.com.console.kassava.kotlinToString
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
@@ -26,17 +29,20 @@ class Product(
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val productGroupList:  List<ProductGroupList> = emptyList()
+): BaseEntity(){
+    override fun toString() = kotlinToString(properties = toStringProperties)
 
-//    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-//    @CollectionTable(name = "books", joinColumns = @JoinColumn(name = "library_id"))
-//    @Column(name = "book", nullable = false)
-//    private List<String> books = new ArrayList<>(),
+    override fun equals(other: Any?) = kotlinEquals(other = other, properties = equalsAndHashCodeProperties)
 
-//    @ElementCollection(targetClass = ProductDetails.class)
-//    @CollectionTable(name = "details", joinColumns = [JoinColumn(name = "product_id")])
-//    @Column(name = "detail")
-//    var roles: List<ProductDetails>
-): BaseEntity()
+    override fun hashCode() = kotlinHashCode(properties = equalsAndHashCodeProperties)
+
+    companion object {
+        private val equalsAndHashCodeProperties = arrayOf(Product::id)
+        private val toStringProperties = arrayOf(
+            Product::id,
+        )
+    }
+}
 
 data class ProductDetails(
     @Schema(description = "헤더", example = "헤더 예제")

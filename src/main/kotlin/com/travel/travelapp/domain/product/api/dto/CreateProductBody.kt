@@ -1,6 +1,6 @@
-package com.travel.travelapp.product.api.dto
+package com.travel.travelapp.domain.product.api.dto
 
-import com.travel.travelapp.product.persistent.ProductDetails
+import com.travel.travelapp.domain.product.persistent.ProductDetails
 import io.swagger.v3.oas.annotations.media.Schema
 
 

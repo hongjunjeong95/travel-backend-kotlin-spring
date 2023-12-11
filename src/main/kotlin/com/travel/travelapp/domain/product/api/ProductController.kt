@@ -1,9 +1,9 @@
-package com.travel.travelapp.product.api
+package com.travel.travelapp.domain.product.api
 
 import com.travel.travelapp.common.dto.ApiResponse
-import com.travel.travelapp.product.api.dto.CreateProductBody
-import com.travel.travelapp.product.service.CreateProductParam
-import com.travel.travelapp.product.service.ProductService
+import com.travel.travelapp.domain.product.api.dto.CreateProductBody
+import com.travel.travelapp.domain.product.service.CreateProductParam
+import com.travel.travelapp.domain.product.service.ProductService
 import com.travel.travelapp.security.ProduerAuthorize
 import com.travel.travelapp.security.UserAuthorize
 import io.swagger.v3.oas.annotations.Operation

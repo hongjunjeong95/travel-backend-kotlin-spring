@@ -1,7 +1,7 @@
 package com.travel.travelapp.productGroup.api.dto
 
-import com.travel.travelapp.product.persistent.Product
-import com.travel.travelapp.product.persistent.ProductDetails
+import com.travel.travelapp.domain.product.persistent.Product
+import com.travel.travelapp.domain.product.persistent.ProductDetails
 import com.travel.travelapp.productGroup.persistent.ProductGroup
 import com.travel.travelapp.productGroup.persistent.ProductGroupStatus
 import com.travel.travelapp.productGroupList.persistent.ProductGroupList

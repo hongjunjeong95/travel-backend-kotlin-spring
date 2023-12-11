@@ -1,6 +1,6 @@
 package com.travel.travelapp.productGroup.api
 
-import com.travel.travelapp.product.service.ProductService
+import com.travel.travelapp.domain.product.service.ProductService
 import com.travel.travelapp.productGroup.api.dto.AddProductToGroupBody
 import com.travel.travelapp.productGroup.api.dto.CreateProductGroupBody
 import com.travel.travelapp.productGroup.persistent.ProductGroup
