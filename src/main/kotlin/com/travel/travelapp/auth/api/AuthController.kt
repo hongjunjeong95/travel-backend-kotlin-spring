@@ -9,6 +9,7 @@ import com.travel.travelapp.common.dto.ApiResponse
 import com.travel.travelapp.security.JWTProperties
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.Valid
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(private val authService: AuthService,private val jwtProperties: JWTProperties) {
     @Operation(summary = "회원 가입")
     @PostMapping("/signup")
-    fun signUp(@RequestBody signUpBody: SignUpBody):ApiResponse<Unit> =
+    fun signUp(@Valid @RequestBody signUpBody: SignUpBody):ApiResponse<Unit> =
         ApiResponse.success(authService.signUp(
             with(signUpBody){
                 SignUpParam(

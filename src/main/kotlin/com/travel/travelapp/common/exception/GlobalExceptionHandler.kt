@@ -1,12 +1,13 @@
 package com.travel.travelapp.common.exception
 
 import com.auth0.jwt.exceptions.JWTDecodeException
-import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.exceptions.SignatureVerificationException
+import com.auth0.jwt.exceptions.TokenExpiredException
 import mu.KotlinLogging
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -48,6 +49,14 @@ class GlobalExceptionHandler {
         logger.error { ex.message }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(code = 400, message = "중복 데이터 허용 불가"))
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleInvalidRequestException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
+        val errors = HashMap<String, String>()
+        e.fieldErrors.forEach { errors[it.field] = it.defaultMessage!! }
+
+        return ResponseEntity.badRequest().body(ErrorResponse(code = 400, message = errors))
     }
 
     @ExceptionHandler(Exception::class)
